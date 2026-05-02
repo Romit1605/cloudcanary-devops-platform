@@ -40,6 +40,8 @@ export const api = {
   },
   getDeployment: (id) => request(`/deployments/${id}`),
   createDeployment: (data) => request('/deployments/', { method: 'POST', body: JSON.stringify(data) }),
+  rollbackDeployment: (id) => request(`/deployments/${id}/rollback`, { method: 'POST' }),
+  getDeploymentLogs: (id) => request(`/deployments/${id}/logs`),
 };
 
 export default api;

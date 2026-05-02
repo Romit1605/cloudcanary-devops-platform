@@ -27,9 +27,9 @@ function Dashboard() {
     fetchData();
   }, []);
 
-  const healthyCount = deployments.filter((d) => d.status === 'healthy').length;
-  const failedCount = deployments.filter((d) => ['failed', 'unhealthy'].includes(d.status)).length;
-  const rolledBackCount = deployments.filter((d) => d.status === 'rolled_back').length;
+  const successCount = deployments.filter((d) => d.status === 'SUCCESS').length;
+  const failedCount = deployments.filter((d) => d.status === 'FAILED').length;
+  const rolledBackCount = deployments.filter((d) => d.status === 'ROLLED_BACK').length;
 
   if (loading) {
     return (
@@ -59,8 +59,12 @@ function Dashboard() {
           <div className="value blue">{projects.length}</div>
         </div>
         <div className="stat-card">
-          <div className="label">Healthy Deploys</div>
-          <div className="value green">{healthyCount}</div>
+          <div className="label">Total Deployments</div>
+          <div className="value blue">{deployments.length}</div>
+        </div>
+        <div className="stat-card">
+          <div className="label">Successful Deploys</div>
+          <div className="value green">{successCount}</div>
         </div>
         <div className="stat-card">
           <div className="label">Failed Deploys</div>
@@ -83,21 +87,23 @@ function Dashboard() {
           <table>
             <thead>
               <tr>
-                <th>Version</th>
+                <th>Project ID</th>
                 <th>Status</th>
-                <th>Trigger</th>
                 <th>Commit</th>
-                <th>Created</th>
+                <th>Image</th>
+                <th>Started</th>
+                <th>Finished</th>
               </tr>
             </thead>
             <tbody>
               {deployments.slice(0, 10).map((d) => (
                 <tr key={d.id}>
-                  <td>v{d.version}</td>
-                  <td><span className={`badge ${d.status}`}>{d.status}</span></td>
-                  <td>{d.trigger}</td>
-                  <td>{d.commit_sha ? d.commit_sha.slice(0, 8) : '—'}</td>
-                  <td>{new Date(d.created_at).toLocaleString()}</td>
+                  <td style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>{d.project_id.slice(0, 8)}…</td>
+                  <td><span className={`badge badge-${d.status}`}>{d.status}</span></td>
+                  <td>{d.commit_hash ? d.commit_hash.slice(0, 8) : '—'}</td>
+                  <td style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>{d.image_tag || '—'}</td>
+                  <td>{new Date(d.started_at).toLocaleString()}</td>
+                  <td>{d.finished_at ? new Date(d.finished_at).toLocaleString() : '—'}</td>
                 </tr>
               ))}
             </tbody>
@@ -109,3 +115,6 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
+
+ 

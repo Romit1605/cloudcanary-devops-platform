@@ -215,9 +215,11 @@ tr:hover td {
   border-radius: 100px;
   font-size: 0.75rem;
   font-weight: 600;
-  text-transform: capitalize;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
+/* Legacy lowercase (kept for safety) */
 .badge.healthy   { background: rgba(52, 211, 153, 0.15); color: var(--green); }
 .badge.running   { background: rgba(96, 165, 250, 0.15); color: var(--blue); }
 .badge.pending   { background: rgba(251, 146, 60, 0.15); color: var(--orange); }
@@ -226,6 +228,13 @@ tr:hover td {
 .badge.rolled_back { background: rgba(251, 146, 60, 0.15); color: var(--orange); }
 .badge.building  { background: rgba(96, 165, 250, 0.15); color: var(--blue); }
 .badge.deploying { background: rgba(96, 165, 250, 0.15); color: var(--blue); }
+
+/* Uppercase statuses from backend */
+.badge-PENDING    { background: rgba(251, 146, 60, 0.15); color: var(--orange); }
+.badge-DEPLOYING  { background: rgba(96, 165, 250, 0.15); color: var(--blue); }
+.badge-SUCCESS    { background: rgba(52, 211, 153, 0.15); color: var(--green); }
+.badge-FAILED     { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+.badge-ROLLED_BACK { background: rgba(251, 146, 60, 0.15); color: var(--orange); }
 
 /* ========== Buttons ========== */
 .btn {
@@ -261,7 +270,107 @@ tr:hover td {
   border-color: var(--text-secondary);
 }
 
-/* ========== Forms ========== */
+.btn-danger {
+  background: rgba(248, 113, 113, 0.15);
+  color: var(--red);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.btn-danger:hover {
+  background: rgba(248, 113, 113, 0.25);
+}
+
+/* ========== Select Input ========== */
+.select-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.select-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ========== Error Banner ========== */
+.error-banner {
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: var(--radius);
+  color: var(--red);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ========== Logs Panel ========== */
+.logs-panel {
+  background: #0a0c14;
+  border-top: 1px solid var(--border);
+  font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.8rem;
+}
+
+.logs-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-family: inherit;
+}
+
+.logs-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.logs-close-btn:hover {
+  background: rgba(255,255,255,0.06);
+  color: var(--text-primary);
+}
+
+.log-line {
+  display: flex;
+  gap: 1rem;
+  padding: 0.3rem 1.25rem;
+  border-bottom: 1px solid rgba(42, 45, 62, 0.5);
+}
+
+.log-line:last-child {
+  border-bottom: none;
+}
+
+.log-time {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  font-size: 0.75rem;
+}
+
+.log-msg {
+  color: #c9d1d9;
+  word-break: break-all;
+}
+
+.logs-empty {
+  padding: 1rem 1.25rem;
+  color: var(--text-secondary);
+  font-family: inherit;
+}
+
+/* ========== Responsive ========== */
 .form-group {
   margin-bottom: 1rem;
 }
