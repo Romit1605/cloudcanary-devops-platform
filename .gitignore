@@ -2,6 +2,8 @@
 .env
 .env.*
 *.env
+.env.example
+deploy-target/.env.example
 
 # Python
 __pycache__/
@@ -26,3 +28,4 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+

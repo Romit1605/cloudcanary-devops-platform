@@ -1,0 +1,79 @@
+# =============================================================================
+# CloudCanary — docker-compose.app.yml
+# =============================================================================
+# Starter Compose file for running a single deployed application container.
+# All values are driven by environment variables so the same file works for
+# any project managed by CloudCanary.
+#
+# Usage:
+#   # Copy and fill in the variables
+#   cp .env.example .env
+#
+#   # Start the app container
+#   APP_IMAGE=myrepo/myapp:latest \
+#   CONTAINER_NAME=myapp \
+#   HOST_PORT=8080 \
+#   CONTAINER_PORT=8080 \
+#   docker compose -f docker-compose.app.yml up -d
+#
+#   # Bring it down
+#   docker compose -f docker-compose.app.yml down
+#
+# Note: deploy.sh / rollback.sh use `docker run` directly for fine-grained
+#       control.  This Compose file is provided as a convenience for manual
+#       deployments and local testing.
+# =============================================================================
+
+version: "3.9"
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # app — the container CloudCanary deploys
+  # ---------------------------------------------------------------------------
+  app:
+    image: ${APP_IMAGE:-nginx:latest}
+    container_name: ${CONTAINER_NAME:-cloudcanary-app}
+    restart: unless-stopped
+
+    ports:
+      # HOST_PORT (external) → CONTAINER_PORT (internal)
+      - "${HOST_PORT:-8080}:${CONTAINER_PORT:-80}"
+
+    # Load application-specific environment variables from .env
+    env_file:
+      - .env
+
+    # Docker-native health check — mirrors what healthcheck.sh verifies.
+    # Adjust the path (/health) to match your application's endpoint.
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://localhost:${CONTAINER_PORT:-80}/health || exit 1"
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    networks:
+      - cloudcanary-app-net
+
+    # Mount a logs directory so container logs survive restarts (optional)
+    volumes:
+      - app-logs:/var/log/app
+
+# ---------------------------------------------------------------------------
+# Networks
+# ---------------------------------------------------------------------------
+networks:
+  cloudcanary-app-net:
+    driver: bridge
+
+# ---------------------------------------------------------------------------
+# Volumes
+# ---------------------------------------------------------------------------
+volumes:
+  app-logs:
+    driver: local
